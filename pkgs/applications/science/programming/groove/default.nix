@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, unzip, makeWrapper, makeDesktopItem, icoutils, jre8 }:
+{ lib, stdenv, fetchurl, unzip, makeWrapper, makeDesktopItem, icoutils, openjdk11 }:
 
 let
   desktopItem = makeDesktopItem {
@@ -12,11 +12,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "groove";
-  version = "5.8.1";
+  version = "6.0.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/groove/groove/${version}/${pname}-${builtins.replaceStrings ["."] ["_"] version}-bin.zip";
-    sha256 = "sha256-JwoUlO6F2+8NtCnLC+xm5q0Jm8RIyU1rnuKGmjgJhFU=";
+    sha256 = "d75b5167fa9215d941b7b780d0e89d1aa6ddd77f55d413a0f81e068fd25adbf5";
   };
 
   nativeBuildInputs = [ unzip makeWrapper icoutils ];
@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     for bin in Generator Imager ModelChecker PrologChecker Simulator Viewer; do
-      makeWrapper ${jre8}/bin/java $out/bin/groove-''${bin,,} \
+      makeWrapper ${openjdk11}/bin/java $out/bin/groove-''${bin,,} \
         --add-flags "-jar $out/share/groove/bin/$bin.jar"
     done
 
